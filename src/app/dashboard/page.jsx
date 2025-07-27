@@ -36,7 +36,7 @@ export default function DashboardPage() {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Prayer Times Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Object.entries(prayerTimes.times || {}).map(([prayer, time]) => (
+        {Object.entries(prayerTimes.data?.timings || prayerTimes.times || {}).map(([prayer, time]) => (
           <div key={prayer} className="bg-white p-4 rounded-lg shadow">
             <h2 className="font-semibold text-lg">{prayer}</h2>
             <p className="text-gray-600">{time}</p>
