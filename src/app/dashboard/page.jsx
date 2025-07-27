@@ -1,76 +1,46 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2822
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+import { useEffect, useState } from 'react';
 
-\f0\fs24 \cf0 // app/dashboard/page.jsx\
-\
-"use client"; // <--- This is essential for interactive components!\
-\
-import \{ useState, useEffect \} from 'react';\
-import \{ supabase \} from '../../lib/supabaseClient'; // Adjust path if needed\
-\
-export default function Dashboard() \{\
-  const [quotes, setQuotes] = useState([]);\
-  const [loading, setLoading] = useState(true);\
-\
-  // Fetch all quotes from the database\
-  async function fetchQuotes() \{\
-    setLoading(true);\
-    const \{ data, error \} = await supabase\
-      .from('quotes')\
-      .select('*')\
-      .order('id', \{ ascending: true \});\
-\
-    if (error) \{\
-      console.error('Error fetching quotes:', error);\
-    \} else \{\
-      setQuotes(data);\
-    \}\
-    setLoading(false);\
-  \}\
-\
-  // Delete a quote by its ID\
-  async function deleteQuote(id) \{\
-    if (window.confirm('Are you sure you want to delete this quote?')) \{\
-        const \{ error \} = await supabase.from('quotes').delete().eq('id', id);\
-        if (error) \{\
-            alert('Error deleting quote: ' + error.message);\
-        \} else \{\
-            fetchQuotes(); // Refresh the list\
-        \}\
-    \}\
-  \}\
-\
-  useEffect(() => \{\
-    fetchQuotes();\
-  \}, []);\
-\
-  if (loading) return <p className="text-center p-4">Loading...</p>;\
-\
-  return (\
-    <div className="max-w-4xl mx-auto p-6 bg-gray-50 min-h-screen">\
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Quotes Dashboard</h1>\
-      <div className="bg-white shadow-md rounded-lg p-4">\
-        <ul className="divide-y divide-gray-200">\
-          \{quotes.map((quote) => (\
-            <li key=\{quote.id\} className="py-4 flex items-center justify-between">\
-              <div>\
-                <p className="text-lg text-gray-900">"\{quote.text\}"</p>\
-                <p className="text-sm text-gray-500">- \{quote.source\}</p>\
-              </div>\
-              <button\
-                onClick=\{() => deleteQuote(quote.id)\}\
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"\
-              >\
-                Delete\
-              </button>\
-            </li>\
-          ))\}\
-        </ul>\
-      </div>\
-    </div>\
-  );\
-\}}
+export default function DashboardPage() {
+  const [prayerTimes, setPrayerTimes] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPrayerTimes = async () => {
+      try {
+        const response = await fetch('/api/prayer-times');
+        const data = await response.json();
+        
+        if (response.ok) {
+          setPrayerTimes(data);
+        } else {
+          setError(data.error || 'Failed to fetch prayer times');
+        }
+      } catch (err) {
+        setError('Failed to fetch prayer times');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPrayerTimes();
+  }, []);
+
+  if (loading) return <div>Loading prayer times...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!prayerTimes) return <div>No prayer times available</div>;
+
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Prayer Times Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {Object.entries(prayerTimes.times || {}).map(([prayer, time]) => (
+          <div key={prayer} className="bg-white p-4 rounded-lg shadow">
+            <h2 className="font-semibold text-lg">{prayer}</h2>
+            <p className="text-gray-600">{time}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
