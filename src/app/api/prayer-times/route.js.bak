@@ -1,0 +1,42 @@
+import { NextResponse } from 'next/server';
+
+export async function GET() {
+  try {
+    const response = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Dubai&country=United Arab Emirates&method=8');
+    const data = await response.json();
+    
+    return NextResponse.json(data);
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to fetch prayer times' },
+      { status: 500 }
+    );
+  }
+}\
+import \{ supabase \} from '../../../lib/supabaseClient'; // Adjust path if needed\
+\
+export async function GET(request) \{\
+  // Get search params from the request URL\
+  const \{ searchParams \} = new URL(request.url);\
+  const dateQuery = searchParams.get('date') || new Date().toLocaleDateString('en-CA');\
+\
+  try \{\
+    const \{ data, error \} = await supabase\
+      .from('prayer_times')\
+      .select('imsaku, sabahu, lindja, dreka, ikindia, akshami, jacia, shenime, festat')\
+      .eq('date', dateQuery)\
+      .single();\
+\
+    if (error) throw error;\
+    if (!data) \{\
+        return NextResponse.json(\
+            \{ message: `No prayer times found for date: $\{dateQuery\}` \}, \
+            \{ status: 404 \}\
+        );\
+    \}\
+\
+    return NextResponse.json(data);\
+  \} catch (error) \{\
+    return NextResponse.json(\{ message: error.message \}, \{ status: 500 \});\
+  \}\
+\}}
