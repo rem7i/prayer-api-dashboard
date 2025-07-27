@@ -17,9 +17,7 @@ const nextConfig = {
     domains: ['api.aladhan.com'],
   },
   experimental: {
-    serverActions: {
-      allowedOrigins: ['localhost:3000', 'prayer-api-dashboard.vercel.app'],
-    },
+    serverActions: true
   },
 }
 
