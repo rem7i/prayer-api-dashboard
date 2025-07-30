@@ -1,103 +1,166 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+  const exampleDate = "2025-01-17";
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+            Prayer Times API
+          </h1>
+          <p className="text-xl text-gray-600 mb-6">
+            Free API for Islamic prayer times and inspirational quotes
+          </p>
+          <Link 
+            href="/dashboard"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            View Dashboard
+          </Link>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* API Endpoints */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Prayer Times API */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              🕌 Prayer Times API
+            </h2>
+            
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-semibold text-gray-700 mb-2">Today's Prayer Times</h3>
+                <div className="bg-gray-50 p-3 rounded border">
+                  <code className="text-sm text-blue-600">
+                    GET /api/prayer-times
+                  </code>
+                </div>
+                <a 
+                  href="/api/prayer-times" 
+                  className="inline-block mt-2 text-blue-600 hover:underline text-sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Try it now →
+                </a>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-gray-700 mb-2">Specific Date</h3>
+                <div className="bg-gray-50 p-3 rounded border">
+                  <code className="text-sm text-blue-600">
+                    GET /api/prayer-times?date={exampleDate}
+                  </code>
+                </div>
+                <a 
+                  href={`/api/prayer-times?date=${exampleDate}`}
+                  className="inline-block mt-2 text-blue-600 hover:underline text-sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Try example →
+                </a>
+              </div>
+
+              <div className="text-sm text-gray-600">
+                <p><strong>Format:</strong> YYYY-MM-DD</p>
+                <p><strong>Location:</strong> Dubai, UAE</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Random Quote API */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              💬 Random Quote API
+            </h2>
+            
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-semibold text-gray-700 mb-2">Random Quote</h3>
+                <div className="bg-gray-50 p-3 rounded border">
+                  <code className="text-sm text-blue-600">
+                    GET /api/random-quote
+                  </code>
+                </div>
+                <a 
+                  href="/api/random-quote" 
+                  className="inline-block mt-2 text-blue-600 hover:underline text-sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Try it now →
+                </a>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-gray-700 mb-2">By Category</h3>
+                <div className="bg-gray-50 p-3 rounded border">
+                  <code className="text-sm text-blue-600">
+                    GET /api/random-quote?category=inspiration
+                  </code>
+                </div>
+                <a 
+                  href="/api/random-quote?category=inspiration"
+                  className="inline-block mt-2 text-blue-600 hover:underline text-sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Try example →
+                </a>
+              </div>
+
+              <div className="text-sm text-gray-600">
+                <p><strong>Categories:</strong> inspiration, motivation, wisdom</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Usage Examples */}
+        <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            📖 Usage Examples
+          </h2>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-semibold text-gray-700 mb-2">JavaScript/Fetch</h3>
+              <div className="bg-gray-900 text-green-400 p-4 rounded text-sm overflow-x-auto">
+                <pre>{`fetch('/api/prayer-times')
+  .then(res => res.json())
+  .then(data => console.log(data));`}</pre>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold text-gray-700 mb-2">cURL</h3>
+              <div className="bg-gray-900 text-green-400 p-4 rounded text-sm overflow-x-auto">
+                <pre>{`curl https://prayer-api-dashboard.vercel.app/api/prayer-times`}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center mt-8 text-gray-600">
+          <p>Free to use • No authentication required • CORS enabled</p>
+          <p className="mt-2">
+            <a 
+              href="https://github.com/rem7i/prayer-api-dashboard" 
+              className="text-blue-600 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View on GitHub
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
